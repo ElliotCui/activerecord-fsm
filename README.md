@@ -24,21 +24,27 @@ Or install it yourself as:
 
 1. `YourClass` should has one column named `status`.  
 2. `#fsm_define` will make `YourClass` inherited ApplicationRecord/ActiveRecord::Base using `ActiveRecord::Fsm`.  
-3. `ActiveRecord::Fsm::Graph.defined_klasses` will show all the classed using `ActiveRecord::Fsm`. Which you can do something like fsm monitor.  
+3. `ActiveRecord::Fsm::Graph.defined_klasses` will show all the classes with `ActiveRecord::Fsm` used. Which you can do something like fsm monitor.  
 
 ```ruby
 class FsmUsedClass < ApplicationRecord
-  fsm_define [
-    [0, 1],
-    [1, 2],
-    [2, 3],
+  STATUS_1 = 1
+  STATUS_2 = 2
+  STATUS_3 = 3
+
+  PERMIT_STATUS = [
+    [STATUS_1, STATUS_2],
+    [STATUS_2, STATUS_3],
+    [STATUS_1, STATUS_3],
   ]
+
+  fsm_define(PERMIT_STATUS)
 end
 
 ActiveRecord::Fsm::Graph.defined_klasses
 # => [FsmUsedClass]
 
-class FsmUsedClass < ApplicationRecord
+class FsmUnusedClass < ApplicationRecord
 end
 
 ActiveRecord::Fsm::Graph.defined_klasses
