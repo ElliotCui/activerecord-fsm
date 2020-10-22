@@ -51,6 +51,14 @@ Maybe you need to do migration, add one column named `status`:
 e.g.  
 
 ```ruby
+class ApplicationRecord < ActiveRecord::Base
+  include ActiveRecord::Fsm
+
+  self.abstract_class = true
+  # blabalbla......
+end
+
+# FsmModel need call fsm_define
 class FsmModel < ApplicationRecord
   STATE_1 = 1
   STATE_2 = 2
@@ -65,12 +73,16 @@ class FsmModel < ApplicationRecord
   fsm_define(PERMIT_TRANSITIONS)
 end
 
+# FsmModel can be shown having used ActiveRecord::Fsm
 ActiveRecord::Fsm::Graph.defined_klasses
 # => [FsmModel]
 
+# NormalModel doesn't call fsm_define
+# although inherited from ApplicationRecord
 class NormalModel < ApplicationRecord
 end
 
+# NormalModel is not included
 ActiveRecord::Fsm::Graph.defined_klasses
 # => [FsmModel]
 ```
