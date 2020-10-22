@@ -1,7 +1,10 @@
 # ActiveRecord::Fsm
 
 A simple Finite State Machine.  
-Use this gem to auto define Finite State Machine on ActiveRecord with one column named `status`.
+Use this gem to auto define Finite State Machine on ActiveRecord with one column named `status`.  
+
+**The goal of this gem is to monitor record with wrong state, and then help us to stats whether or not the code works well.**  
+**The next step is to add monitor to FSM, and now it is currently UNDER DEVELOPMENT.**
 
 ## Installation
 
@@ -57,7 +60,7 @@ class ApplicationRecord < ActiveRecord::Base
   include ActiveRecord::Fsm
 
   self.abstract_class = true
-  # blabalbla......
+  # blablabla......
 end
 
 # FsmModel need call fsm_define
