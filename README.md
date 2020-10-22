@@ -42,8 +42,8 @@ Maybe you need to do migration, add one column named `status`:
         end
       end
     ```
-    **Model without using `fsm_define` will only act as the same with `NomalModel` which doesn't has fsm mechanic.**  
-    In other words, using `fsm_define` will make `NomalModel` become `FsmModel`.
+    **Model without using `fsm_define` will only act as the same with `NormalModel` which doesn't has fsm mechanic.**  
+    In other words, using `fsm_define` will make `NormalModel` become `FsmModel`.
 
 3. Use `FsmModel.fsm_graph.states` to get permit_transition you defined.
 4. Use `ActiveRecord::Fsm::Graph.defined_klasses` to get all the models which really used `ActiveRecord::Fsm`.
