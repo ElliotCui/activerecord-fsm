@@ -6,7 +6,7 @@ module ActiveRecord
       def initialize(transitions)
         @transitions = transitions
         @states = transitions.flatten.uniq
-        @final_states = transitions.map(&:last) - transitions.map(&:first)
+        @final_states = (transitions.map(&:last) - transitions.map(&:first)).uniq
       end
 
       def valid_transition?(cur_state, tar_state)
