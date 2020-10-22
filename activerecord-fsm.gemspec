@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "A simple Finite State Machine."
   spec.description   = "Use this gem to auto define Finite State Machine on ActiveRecord with one column named `status`."
-  spec.homepage      = "https://github.com/ElliotCui"
+  spec.homepage      = "https://github.com/ElliotCui/activerecord-fsm"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 
