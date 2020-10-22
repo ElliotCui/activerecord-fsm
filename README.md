@@ -1,8 +1,7 @@
 # ActiveRecord::Fsm
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/activerecord/fsm`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A simple Finite State Machine.  
+Use this gem to auto define Finite State Machine on ActiveRecord with one column named `status`.
 
 ## Installation
 
@@ -20,29 +19,60 @@ Or install it yourself as:
 
     $ gem install activerecord-fsm
 
+Maybe you need to do migration, add one column named `status`:
+
+    bin/rails generate migration AddStatusToFsmModel status:integer:index  
+    # or you can specify column type
+    bin/rails generate migration AddStatusToFsmModel status:{column_type}:index
+
 ## Usage
 
-1. `YourClass` should has one column named `status`.  
-2. `#fsm_define` will make `YourClass` inherited ApplicationRecord/ActiveRecord::Base using `ActiveRecord::Fsm`.  
-3. `ActiveRecord::Fsm::Graph.defined_klasses` will show all the classed using `ActiveRecord::Fsm`. Which you can do something like fsm monitor.  
+1. Include `ActiveRecord::Fsm` into `ApplicationRecord/ActiveRecord::Base` or directly into `FsmModel`.  
+2. Use `#fsm_define` to arrange permit_transitions set in which status can be transitioned from one to another. This will add:
+    
+        validates :status, presence: true, inclusion: { in: self.fsm_graph.states }
+        validate :fsm_graph_check_permit_transitions, on: :update, if: :will_save_change_to_status?
+
+    `fsm_graph_check_permit_transitions` has been defined as:
+    ```
+      def fsm_graph_check_permit_transitions
+        unless self.class.fsm_graph.valid_transition?(*self.status_change)
+          self.errors.add(:status, 'no permit status change')
+          throw :abort
+        end
+      end
+    ```
+    **Model without using `fsm_define` will only act as the same with `NomalModel` which doesn't has fsm mechanic.**  
+    In other words, using `fsm_define` will make `NomalModel` become `FsmModel`.
+
+3. Use `FsmModel.fsm_graph.states` to get permit_transition you defined.
+4. Use `ActiveRecord::Fsm::Graph.defined_klasses` to get all the models which really used `ActiveRecord::Fsm`.
+
+e.g.  
 
 ```ruby
-class FsmUsedClass < ApplicationRecord
-  fsm_define [
-    [0, 1],
-    [1, 2],
-    [2, 3],
+class FsmModel < ApplicationRecord
+  STATE_1 = 1
+  STATE_2 = 2
+  STATE_3 = 3
+
+  PERMIT_TRANSITIONS = [
+    [STATE_1, STATE_2],
+    [STATE_2, STATE_3],
+    [STATE_1, STATE_3],
   ]
+
+  fsm_define(PERMIT_TRANSITIONS)
 end
 
 ActiveRecord::Fsm::Graph.defined_klasses
-# => [FsmUsedClass]
+# => [FsmModel]
 
-class FsmUsedClass < ApplicationRecord
+class NormalModel < ApplicationRecord
 end
 
 ActiveRecord::Fsm::Graph.defined_klasses
-# => [FsmUsedClass]
+# => [FsmModel]
 ```
 
 ## Development
