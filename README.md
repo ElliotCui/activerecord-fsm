@@ -92,6 +92,12 @@ ActiveRecord::Fsm::Graph.defined_klasses
 # => [FsmModel]
 ```
 
+## UpdateLog
+
+v 0.1.4
+
+add instance_variable `mid_states` and instance_method `mid_state?(state)` for `ActiveRecord::Fsm::Graph`
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
