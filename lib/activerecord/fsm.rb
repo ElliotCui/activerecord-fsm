@@ -13,7 +13,7 @@ module ActiveRecord
 
           def fsm_graph_check_permit_transitions
             unless self.class.fsm_graph.valid_transition?(*self.status_change)
-              self.errors.add(:status, 'no permit status change')
+              self.errors.add(:status, "no permit status change. #{self.status_change}")
               throw :abort
             end
           end
