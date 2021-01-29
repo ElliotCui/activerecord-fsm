@@ -75,7 +75,7 @@ class FsmModel < ApplicationRecord
     [STATE_1, STATE_3],
   ]
 
-  fsm_define(PERMIT_TRANSITIONS)
+  fsm_define(PERMIT_TRANSITIONS, fsm_column = "status")
 end
 
 # FsmModel can be shown having used ActiveRecord::Fsm
